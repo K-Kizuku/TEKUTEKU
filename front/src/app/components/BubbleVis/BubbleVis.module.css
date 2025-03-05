@@ -1,0 +1,9 @@
+.container {
+  position: relative;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 0 auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Bubble from "./../Bubble/page"
 import type { BubbleType } from "./../../data/types"
-import styles from "./bubblevis.module.css"
+import styles from "./BubbleVis.module.css"
 
 interface BubbleVisProps {
   bubbles: BubbleType[]
@@ -15,23 +15,22 @@ export default function BubbleVis({ bubbles, onLike }: BubbleVisProps) {
   const [selectedBubble, setSelectedBubble] = useState<number | null>(null)
   const [containerSize, setContainerSize] = useState({ width: 800, height: 600 })
 
-  // Helper function to calculate bubble size based on likes
+  // Calculate bubble size based on likes
   const getBubbleSize = (likes: number) => 50 + likes * 5
 
-  // Helper function to check if two bubbles overlap
+  // Check if bubbles overlap
   const checkOverlap = (
     pos1: { x: number; y: number },
     size1: number,
     pos2: { x: number; y: number },
     size2: number,
   ) => {
-    // Calculate distance between centers
     const dx = pos1.x - pos2.x
     const dy = pos1.y - pos2.y
     const distance = Math.sqrt(dx * dx + dy * dy)
 
-    // If distance is less than sum of radii, they overlap
-    return distance < size1 / 2 + size2 / 2 + 10 // Adding 10px buffer
+    // Add buffer to prevent too-close placement
+    return distance < size1 / 2 + size2 / 2 + 20
   }
 
   // Generate a non-overlapping position for a bubble
@@ -41,24 +40,23 @@ export default function BubbleVis({ bubbles, onLike }: BubbleVisProps) {
     existingPositions: { [key: number]: { x: number; y: number } },
   ) => {
     const bubbleSize = getBubbleSize(bubbleLikes)
-    const padding = bubbleSize / 2 + 10 // Add padding to avoid edges
+    const padding = bubbleSize / 2 + 20 // Increased padding
 
     let attempts = 0
-    const maxAttempts = 100 // Prevent infinite loops
+    const maxAttempts = 200 // Increased max attempts
 
     while (attempts < maxAttempts) {
-      // Generate a random position
+      // Generate random position with more spread
       const newPos = {
         x: padding + Math.random() * (containerSize.width - 2 * padding),
         y: padding + Math.random() * (containerSize.height - 2 * padding),
       }
 
-      // Check if this position overlaps with any existing bubble
+      // Check for overlap with existing bubbles
       let hasOverlap = false
 
       for (const id in existingPositions) {
         if (Number.parseInt(id) !== bubbleId) {
-          // Don't check against itself
           const otherBubble = bubbles.find((b) => b.id === Number.parseInt(id))
           if (otherBubble) {
             const otherSize = getBubbleSize(otherBubble.likes)
@@ -70,7 +68,7 @@ export default function BubbleVis({ bubbles, onLike }: BubbleVisProps) {
         }
       }
 
-      // If no overlap, return this position
+      // Return position if no overlap
       if (!hasOverlap) {
         return newPos
       }
@@ -78,21 +76,19 @@ export default function BubbleVis({ bubbles, onLike }: BubbleVisProps) {
       attempts++
     }
 
-    // If we couldn't find a non-overlapping position after max attempts,
-    // return a position with some offset from the center
+    // Fallback to slightly randomized center if no position found
     return {
-      x: containerSize.width / 2 + (Math.random() - 0.5) * 100,
-      y: containerSize.height / 2 + (Math.random() - 0.5) * 100,
+      x: containerSize.width / 2 + (Math.random() - 0.5) * 200,
+      y: containerSize.height / 2 + (Math.random() - 0.5) * 200,
     }
   }
 
-  // Initialize non-overlapping positions for bubbles
+  // Initialize bubble positions
   useEffect(() => {
     setPositions((prevPositions) => {
       const newPositions = { ...prevPositions }
 
-      // Process bubbles in order of size (largest first)
-      // This helps place larger bubbles first, which are harder to position
+      // Sort bubbles by likes to place larger bubbles first
       const sortedBubbles = [...bubbles].sort((a, b) => b.likes - a.likes)
 
       for (const bubble of sortedBubbles) {
@@ -103,26 +99,26 @@ export default function BubbleVis({ bubbles, onLike }: BubbleVisProps) {
 
       return newPositions
     })
-  }, [bubbles])
+  }, [bubbles, containerSize])
 
-  // Update positions when likes change (bubble sizes change)
+  // Update positions when likes change or bubbles are modified
   useEffect(() => {
-    setPositions((prevPositions): Record<number, { x: number; y: number }> => {
+    setPositions((prevPositions) => {
       const newPositions = { ...prevPositions }
-  
+
       const sortedBubbles = [...bubbles].sort((a, b) => b.likes - a.likes)
-  
+
       for (const bubble of sortedBubbles) {
         if (!newPositions[bubble.id]) {
           newPositions[bubble.id] = generateNonOverlappingPosition(bubble.id, bubble.likes, newPositions)
         }
       }
-  
+
       return newPositions
     })
   }, [bubbles])
 
-  // Update container size on window resize
+  // Adjust container size on window resize
   useEffect(() => {
     const handleResize = () => {
       setContainerSize({
@@ -136,9 +132,13 @@ export default function BubbleVis({ bubbles, onLike }: BubbleVisProps) {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
+  // Toggle replies for a specific bubble
   const toggleReplies = (id: number) => {
     setSelectedBubble(selectedBubble === id ? null : id)
   }
+
+  // Convert positions to array of positions for existingPositions prop
+  const existingPositionsArray = Object.values(positions);
 
   return (
     <div className={styles.container} style={{ width: containerSize.width, height: containerSize.height }}>
@@ -147,12 +147,12 @@ export default function BubbleVis({ bubbles, onLike }: BubbleVisProps) {
           key={bubble.id}
           bubble={bubble}
           onLike={onLike}
-          position={positions[bubble.id] || { x: containerSize.width / 2, y: containerSize.height / 2 }}
+          existingPositions={existingPositionsArray}
           showReplies={selectedBubble === bubble.id}
           toggleReplies={() => toggleReplies(bubble.id)}
+          position={positions[bubble.id] || { x: containerSize.width / 2, y: containerSize.height / 2 }}
         />
       ))}
     </div>
   )
 }
-
