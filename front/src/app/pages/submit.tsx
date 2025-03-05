@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
+//
+
 const SubmitPage: React.FC = () => {
   const [content, setContent] = useState('');
   const [isSwiping, setIsSwiping] = useState(false);
