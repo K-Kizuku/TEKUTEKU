@@ -1,17 +1,16 @@
 'use client';
-import type { BubbleType } from "./../../data/types";
+import type { BubbleType2 } from "./../../data/types";
 import styles from "./Bubble.module.css";
 import { Heart, Plus } from "lucide-react";
 import { useEffect, useState, CSSProperties } from "react";
 import ReplyModal from "./../replymodal/page";
 
 interface BubbleProps {
-    bubble: BubbleType;
-    onLike: (id: number) => void;
+    bubble: BubbleType2;
+    onLike: (id: string) => void;
     showReplies: boolean;
     toggleReplies: () => void;
-    position: { x: number; y: number };
-    onAddReply: (bubbleId: number, replyText: string) => void;
+    onAddReply: (bubbleId: string, replyText: string) => void;
 }
 
 export default function Bubble({ 
@@ -19,7 +18,6 @@ export default function Bubble({
     onLike, 
     showReplies, 
     toggleReplies, 
-    position,
     onAddReply 
 }: BubbleProps) {
     const size = 100 + bubble.likes * 5;
@@ -36,13 +34,16 @@ export default function Bubble({
     const bubbleStyle: CSSProperties = {
         width: `${size}px`,
         height: `${size}px`,
-        left: `${position.x}px`,
-        top: `${position.y}px`,
+        left: `${bubble.position.x}px`,
+        top: `${bubble.position.y}px`,
         animationDelay: animationDelay || '0s',
         zIndex: isClicked ? 9999 : 1,
+        borderRadius: '50%',
+        background: bubble.type === 1 
+            ? 'radial-gradient(#96fbc4 50%, #f9f586 100%)' 
+            : 'radial-gradient(#f9f586 55%, #96fbc4 100%)',
     };
 
-    // Calculate positions for the reply bubbles
     const replyRadius = size * 0.8;
     const calculateReplyPositions = (numReplies: number) => {
         return Array.from({ length: numReplies }, (_, i) => {
@@ -57,20 +58,19 @@ export default function Bubble({
     const maxReplies = 8;
     const replyPositions = calculateReplyPositions(maxReplies);
 
-    // Handle toggling the replies with animation
     const handleToggleReplies = () => {
         if (showReplies) {
             setIsClosing(true);
             setTimeout(() => {
                 toggleReplies();
                 setIsClosing(false);
-            }, 400); // Match this to the disappear animation duration
+            }, 400);
         } else {
             setIsClicked(true);
             toggleReplies();
             setTimeout(() => {
                 setIsClicked(false);
-            }, 500); // Match this to the pulse animation duration
+            }, 500);
         }
     };
 
@@ -84,7 +84,6 @@ export default function Bubble({
         setShowModal(true);
     };
 
-    // Determine where to place the plus button
     const getPlusButtonIndex = () => {
         return bubble.replies ? Math.min(bubble.replies.length, maxReplies - 1) : 0;
     };
@@ -132,7 +131,9 @@ export default function Bubble({
                                         width: `${50 + size / 4}px`,
                                         height: `${50 + size / 4}px`, 
                                         borderRadius: '50%',
-                                        background: 'linear-gradient(to top, #6bffb5 0%, #6bffb5 0%)', 
+                                        background: bubble.type === 1 
+                                            ? 'linear-gradient(to top, #f9f586 0%, #f9f586 100%)' 
+                                            : 'linear-gradient(to top, #96fbc4 0%, #96fbc4 100%)', 
                                         left: `${position.x + size / 2 - 25 - size / 8}px`,
                                         top: `${position.y + size / 2 - 25 - size / 8}px`,
                                         '--bubble-index': index,

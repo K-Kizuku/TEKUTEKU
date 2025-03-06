@@ -14,6 +14,7 @@ export default function PostPage() {
   const [hintText, setHintText] = useState("上にスワイプしてバブルを送信");
   const [showCheckmark, setShowCheckmark] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [school, setSchool] = useState(0); // schoolの選択肢
 
   // 送信ボタン押下時、入力内容をバブルプレビューとして表示
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -57,38 +58,29 @@ export default function PostPage() {
   };
 
   // バブル送信処理：バブルを上にアニメーションさせた後、チェックマークとモーダルを表示
-  const submitBubble = async() => {
-
-    // 送信処理
-
-    try{
-      const response = await fetch('/api/submit', {
+  const submitBubble = async () => {
+    try {
+      const response = await fetch('https://32a1-2405-6581-1420-4300-8823-37ad-1916-ec71.ngrok-free.app', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          // text: sendText,
-          // schoolId: sid, 
+          text: previewBubble,  // 投稿内容
+          school: school,  // 大学の選択値
         }),
       });
 
       if (response.ok) {
         alert('投稿が成功しました');
       } else {
+        
         alert('投稿に失敗しました');
       }
     } catch (error) {
       console.error('エラー:', error);
       alert('投稿中にエラーが発生しました');
     }
-
-    // 送信処理ここまで
-
-
-
-
-
 
     setBubbleAnimating(true);
     setHintText("送信済み");
@@ -140,10 +132,13 @@ export default function PostPage() {
       )}
 
       <form className={styles.postEditArea} onSubmit={handleSubmit}>
-
-        <select className={styles.dropdown}>
-          <option value="東京科学大学">東京科学大学</option>
-          <option value="九州工業大学">九州工業大学</option>
+        <select
+          className={styles.dropdown}
+          value={school}
+          onChange={(e) => setSchool(parseInt(e.target.value))}
+        >
+          <option value={0}>東京科学大学</option>
+          <option value={1}>九州工業大学</option>
         </select>
 
         <textarea

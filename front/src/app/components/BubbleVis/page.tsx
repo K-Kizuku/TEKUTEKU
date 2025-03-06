@@ -1,61 +1,59 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import Bubble from "./../Bubble/page"
-import type { BubbleType } from "./../../data/types"
-import styles from "./BubbleVis.module.css"
+// BubbleVis コンポーネント内の修正
+import { useState } from "react";
+import Bubble from "./../Bubble/page";
+import type { BubbleType2 } from "./../../data/types";
+import styles from "./BubbleVis.module.css";
 
 interface BubbleVisProps {
-  bubbles: BubbleType[]
-  onLike: (id: number) => void
+  bubbles: BubbleType2[];
+  onLike: (id: string) => void;
 }
 
 export default function BubbleVis({ bubbles, onLike }: BubbleVisProps) {
-  const [selectedBubble, setSelectedBubble] = useState<number | null>(null)
-  const [bubblesData, setBubblesData] = useState<BubbleType[]>(bubbles)
+  const [selectedBubble, setSelectedBubble] = useState<string | null>(null);
+  const [bubblesData, setBubblesData] = useState<BubbleType2[]>(bubbles);
   
   // バブルのリプライ表示を切り替える
-  const toggleReplies = (id: number) => {
-    setSelectedBubble(selectedBubble === id ? null : id)
-  }
+  const toggleReplies = (id: string) => {
+    setSelectedBubble(selectedBubble === id ? null : id);
+  };
 
   // 新しいリプライを追加する
-  const handleAddReply = (bubbleId: number, replyText: string) => {
-    setBubblesData(prevBubbles => {
-      return prevBubbles.map(bubble => {
+  const handleAddReply = (bubbleId: string, replyText: string) => {
+    setBubblesData((prevBubbles) => {
+      return prevBubbles.map((bubble) => {
         if (bubble.id === bubbleId) {
-          // Create a new reply object
           const newReply = {
-            id: Date.now(), // Generate a unique ID using timestamp
+            id: `${Date.now()}`, // 文字列のIDに変更
             text: replyText,
             likes: 0
           };
-          
-          // Add the new reply to the existing replies or create a new array if no replies exist
-          const updatedReplies = bubble.replies ? [...bubble.replies, newReply] : [newReply];
-          
-          // Return the updated bubble
+  
+          // repliesがBubbleType2の型を満たすように、型を整える
           return {
             ...bubble,
-            replies: updatedReplies
+            replies: bubble.replies ? [...bubble.replies, newReply] : [newReply]
           };
         }
         return bubble;
       });
     });
   };
+  
+  
 
-  // バブルにいいねを追加する機能を拡張
-  const handleLike = (id: number) => {
+  // バブルにいいねを追加する
+  const handleLike = (id: string) => {
     onLike(id);
-    // ローカルステートも更新
-    setBubblesData(prevBubbles => 
-      prevBubbles.map(bubble => 
+    setBubblesData(prevBubbles =>
+      prevBubbles.map(bubble =>
         bubble.id === id ? { ...bubble, likes: bubble.likes + 1 } : bubble
       )
     );
-  }
-  
+  };
+
   return (
     <div className={styles.scrollContainer}>
       <div className={styles.container}>
@@ -66,11 +64,10 @@ export default function BubbleVis({ bubbles, onLike }: BubbleVisProps) {
             onLike={handleLike}
             showReplies={selectedBubble === bubble.id}
             toggleReplies={() => toggleReplies(bubble.id)}
-            position={{ x: bubble.x, y: bubble.y }}
             onAddReply={handleAddReply}
           />
         ))}
       </div>
     </div>
-  )
+  );
 }
