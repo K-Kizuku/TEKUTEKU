@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS  messages(
     x         int NOT NULL,
     y         int NOT NULL,
     message text NOT NULL,
-    created_at timestamp NOT NULL,
+    created_at text NOT NULL,
     float_time real NOT NULL,
     likes int NOT NULL DEFAULT 0
 );

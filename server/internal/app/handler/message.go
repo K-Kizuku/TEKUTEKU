@@ -2,9 +2,11 @@ package handler
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/0-s0g0/TEKUTEKU/server/internal/app/handler/schema"
+	"github.com/0-s0g0/TEKUTEKU/server/internal/domain/entity"
 
 	"github.com/0-s0g0/TEKUTEKU/server/internal/app/service"
 )
@@ -41,6 +43,7 @@ func (m *MessageHandler) GET() func(http.ResponseWriter, *http.Request) error {
 				X:         v.X,
 				Y:         v.Y,
 				FloatTime: v.FloatTime,
+				CreatedAt: v.CreatedAt.String(),
 			})
 		}
 		res := schema.MessageGETResponse{
@@ -57,5 +60,22 @@ func (m *MessageHandler) GET() func(http.ResponseWriter, *http.Request) error {
 
 // POST implements IMessageHandler.
 func (m *MessageHandler) POST() func(http.ResponseWriter, *http.Request) error {
-	return nil
+	return func(w http.ResponseWriter, r *http.Request) error {
+		var req schema.MessagePOSTRequest
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			return err
+		}
+		message := entity.Message{
+			School:  req.School,
+			Message: req.Message,
+		}
+		createdMessage, err := m.ms.Create(r.Context(), message)
+		if err != nil {
+			return err
+		}
+		log.Printf("createdMessage: %+v", createdMessage)
+
+		w.WriteHeader(http.StatusCreated)
+		return nil
+	}
 }

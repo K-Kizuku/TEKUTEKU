@@ -7,8 +7,6 @@ package query
 import (
 	"database/sql/driver"
 	"fmt"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type University string
@@ -59,7 +57,7 @@ type Message struct {
 	X         int32
 	Y         int32
 	Message   string
-	CreatedAt pgtype.Timestamp
+	CreatedAt string
 	FloatTime float32
 	Likes     int32
 }

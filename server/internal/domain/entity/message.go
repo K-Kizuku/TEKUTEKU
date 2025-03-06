@@ -1,5 +1,7 @@
 package entity
 
+import "time"
+
 type Message struct {
 	ID        string
 	Message   string
@@ -8,4 +10,5 @@ type Message struct {
 	Y         int
 	FloatTime float32
 	School    int
+	CreatedAt time.Time
 }
