@@ -6,13 +6,13 @@
 | ---- | ------- | ------- | ---- |
 | [public.schema_migrations](public.schema_migrations.md) | 2 |  | BASE TABLE |
 | [public.users](public.users.md) | 5 |  | BASE TABLE |
-| [public.messages](public.messages.md) | 4 |  | BASE TABLE |
+| [public.messages](public.messages.md) | 8 |  | BASE TABLE |
 
 ## Enums
 
 | Name | Values |
 | ---- | ------- |
-| public.university | gymlab, porto, taki_plaza |
+| public.university | kyutech, science tokyo |
 
 ## Relations
 

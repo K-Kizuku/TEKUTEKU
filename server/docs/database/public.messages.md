@@ -7,9 +7,13 @@
 | Name | Type | Default | Nullable | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | -------- | ------- | ------- |
 | message_id | text |  | false |  |  |  |
-| user_id | text |  | false |  |  |  |
+| school | integer |  | false |  |  |  |
+| x | integer |  | false |  |  |  |
+| y | integer |  | false |  |  |  |
 | message | text |  | false |  |  |  |
 | created_at | timestamp without time zone |  | false |  |  |  |
+| float_time | real |  | false |  |  |  |
+| likes | integer | 0 | false |  |  |  |
 
 ## Constraints
 
