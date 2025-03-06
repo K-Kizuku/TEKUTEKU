@@ -34,3 +34,10 @@ UPDATE messages
   set likes = likes + 1
 WHERE message_id = $1;
 
+-- name: CreateMessage :one
+INSERT INTO messages (
+  message_id, school, x, y, message, created_at, float_time
+) VALUES (
+  $1, $2, $3, $4, $5, $6, $7
+)
+RETURNING *;

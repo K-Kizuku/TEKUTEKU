@@ -2,10 +2,12 @@ package service
 
 import (
 	"context"
+	"math/rand"
 	"time"
 
 	"github.com/0-s0g0/TEKUTEKU/server/internal/domain/entity"
 	"github.com/0-s0g0/TEKUTEKU/server/internal/domain/repository"
+	"github.com/0-s0g0/TEKUTEKU/server/pkg/uuid"
 )
 
 type IMessageService interface {
@@ -28,7 +30,19 @@ func NewMessageService(mr repository.IMessageRepository) IMessageService {
 
 // Create implements IMessageService.
 func (m *MessageService) Create(ctx context.Context, message entity.Message) (*entity.Message, error) {
-	return nil, nil
+	mess := entity.Message{
+		ID:        uuid.New(),
+		School:    message.School,
+		Message:   message.Message,
+		X:         rand.Intn(5) * 10,
+		Y:         rand.Intn(5) * 10,
+		FloatTime: float32(rand.Intn(10))*0.2 + 5.0,
+	}
+	created, err := m.mr.Create(ctx, mess)
+	if err != nil {
+		return nil, err
+	}
+	return created, nil
 }
 
 // GetAll implements IMessageService.

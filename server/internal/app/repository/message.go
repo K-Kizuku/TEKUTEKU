@@ -21,7 +21,27 @@ func NewMessageRepository(queries *query.Queries) repository.IMessageRepository 
 
 // Create implements repository.IMessageRepository.
 func (m *MessageRepository) Create(ctx context.Context, message entity.Message) (*entity.Message, error) {
-	return nil, nil
+	massage, err := m.queries.CreateMessage(ctx, query.CreateMessageParams{
+		MessageID: message.ID,
+		School:    int32(message.School),
+		Message:   message.Message,
+		X:         int32(message.X),
+		Y:         int32(message.Y),
+		FloatTime: message.FloatTime,
+	})
+	if err != nil {
+		return nil, errors.HandleDBError(err)
+	}
+	createdMessage := &entity.Message{
+		ID:        massage.MessageID,
+		School:    int(massage.School),
+		Message:   massage.Message,
+		Likes:     int(massage.Likes),
+		X:         int(massage.X),
+		Y:         int(massage.Y),
+		FloatTime: massage.FloatTime,
+	}
+	return createdMessage, nil
 }
 
 // GetAll implements repository.IMessageRepository.

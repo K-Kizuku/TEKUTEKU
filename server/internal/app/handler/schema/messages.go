@@ -2,6 +2,7 @@ package schema
 
 type MessagePOSTRequest struct {
 	Message string `json:"message"`
+	School  int    `json:"school"`
 }
 
 type MessagePOSTResponse struct {
