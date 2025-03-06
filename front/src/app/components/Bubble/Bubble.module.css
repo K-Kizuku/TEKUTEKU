@@ -196,3 +196,51 @@
       transform: scale(0) translate(0, 0);
     }
   }
+
+
+  /* New bubbles that rise from the bottom */
+.newBubble {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #a3d9ff, #7dc5ff);
+  opacity: 0;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  animation: riseBubble 3s ease-out forwards;
+}
+
+/* Create variation in animation timing */
+.newBubble:nth-child(odd) {
+  animation-duration: 2.5s;
+}
+
+.newBubble:nth-child(3n) {
+  animation-duration: 3.5s;
+}
+
+.newBubble:nth-child(3n+1) {
+  width: 20px;
+  height: 20px;
+}
+
+.newBubble:nth-child(4n) {
+  width: 15px;
+  height: 15px;
+  animation-duration: 4s;
+}
+
+/* Animation for bubbles rising from the bottom */
+@keyframes riseBubble {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-200px) translateX(calc(sin(var(--random-angle, 0deg)) * 50px));
+    opacity: 0;
+  }
+}
