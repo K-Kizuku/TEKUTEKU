@@ -4,7 +4,6 @@ import styles from "./Bubble.module.css";
 import { Heart } from "lucide-react";
 import { useEffect, useState, CSSProperties } from "react";
 
-
 interface BubbleProps {
     bubble: BubbleType;
     onLike: (id: number) => void;
@@ -69,7 +68,10 @@ export default function Bubble({ bubble, onLike, showReplies, toggleReplies, pos
                 <span className={styles.likeCount}>{bubble.likes}</span>
             </button>
 
+
+
             {/* 8個の円だけを表示 */}
+
             {showReplies && (
     <div className={styles.repliesContainer} style={{ position: 'absolute', width: '100%', height: '100%' }}>
         {replyPositions.map((position, index) => {
@@ -86,10 +88,17 @@ export default function Bubble({ bubble, onLike, showReplies, toggleReplies, pos
                          top: `${position.y + size / 2 - 25 - size / 8}px`,  // container center offset
                      }}
                 >
-                    {/* reply.text が存在する場合のみ表示 */}
-                    {reply && 
-                    <span className={styles.replyText}>{reply.text}</span>
-                    }
+                    {/* テキストを円の中心に配置 */}
+                    {reply && (
+                        <span className={styles.replyText} style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)', // 中央揃え
+                        }}>
+                            {reply.text}
+                        </span>
+                    )}
                 </div>
             );
         })}
