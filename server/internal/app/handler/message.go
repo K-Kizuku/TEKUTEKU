@@ -2,8 +2,9 @@ package handler
 
 import (
 	"encoding/json"
-	"github.com/0-s0g0/TEKUTEKU/server/internal/app/handler/schema"
 	"net/http"
+
+	"github.com/0-s0g0/TEKUTEKU/server/internal/app/handler/schema"
 
 	"github.com/0-s0g0/TEKUTEKU/server/internal/app/service"
 )
@@ -34,6 +35,7 @@ func (m *MessageHandler) GET() func(http.ResponseWriter, *http.Request) error {
 		for _, v := range message {
 			m = append(m, schema.Message{
 				ID:        v.ID,
+				School:    v.School,
 				Message:   v.Message,
 				Likes:     v.Likes,
 				X:         v.X,
@@ -43,7 +45,6 @@ func (m *MessageHandler) GET() func(http.ResponseWriter, *http.Request) error {
 		}
 		res := schema.MessageGETResponse{
 			Messages: m,
-			School:   1,
 		}
 		if err := json.NewEncoder(w).Encode(res); err != nil {
 			return err
@@ -56,5 +57,5 @@ func (m *MessageHandler) GET() func(http.ResponseWriter, *http.Request) error {
 
 // POST implements IMessageHandler.
 func (m *MessageHandler) POST() func(http.ResponseWriter, *http.Request) error {
-	panic("unimplemented")
+	return nil
 }

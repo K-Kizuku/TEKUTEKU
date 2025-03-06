@@ -7,4 +7,5 @@ type Message struct {
 	X         int
 	Y         int
 	FloatTime float32
+	School    int
 }

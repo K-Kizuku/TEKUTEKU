@@ -28,7 +28,7 @@ func NewMessageService(mr repository.IMessageRepository) IMessageService {
 
 // Create implements IMessageService.
 func (m *MessageService) Create(ctx context.Context, message entity.Message) (*entity.Message, error) {
-	panic("unimplemented")
+	return nil, nil
 }
 
 // GetAll implements IMessageService.
@@ -38,12 +38,12 @@ func (m *MessageService) GetAll(ctx context.Context) ([]entity.Message, error) {
 
 // GetByID implements IMessageService.
 func (m *MessageService) GetByID(ctx context.Context, id string) (*entity.Message, error) {
-	panic("unimplemented")
+	return nil, nil
 }
 
 // GetByTimeRange implements IMessageService.
 func (m *MessageService) GetByTimeRange(ctx context.Context, from time.Time, to time.Time) ([]entity.Message, error) {
-	panic("unimplemented")
+	return nil, nil
 }
 
 // GiveLike implements IMessageService.

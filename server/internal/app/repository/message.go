@@ -2,8 +2,9 @@ package repository
 
 import (
 	"context"
-	"github.com/0-s0g0/TEKUTEKU/server/pkg/errors"
 	"time"
+
+	"github.com/0-s0g0/TEKUTEKU/server/pkg/errors"
 
 	"github.com/0-s0g0/TEKUTEKU/server/db/sql/query"
 	"github.com/0-s0g0/TEKUTEKU/server/internal/domain/entity"
@@ -20,7 +21,7 @@ func NewMessageRepository(queries *query.Queries) repository.IMessageRepository 
 
 // Create implements repository.IMessageRepository.
 func (m *MessageRepository) Create(ctx context.Context, message entity.Message) (*entity.Message, error) {
-	panic("unimplemented")
+	return nil, nil
 }
 
 // GetAll implements repository.IMessageRepository.
@@ -29,10 +30,11 @@ func (m *MessageRepository) GetAll(ctx context.Context) ([]entity.Message, error
 	if err != nil {
 		return nil, errors.HandleDBError(err)
 	}
-	var a []entity.Message
+	a := make([]entity.Message, 0, len(massage))
 	for _, m := range massage {
 		a = append(a, entity.Message{
 			ID:        m.MessageID,
+			School:    int(m.School),
 			Message:   m.Message,
 			Likes:     int(m.Likes),
 			X:         int(m.X),
@@ -45,12 +47,12 @@ func (m *MessageRepository) GetAll(ctx context.Context) ([]entity.Message, error
 
 // GetByID implements repository.IMessageRepository.
 func (m *MessageRepository) GetByID(ctx context.Context, id string) (*entity.Message, error) {
-	panic("unimplemented")
+	return nil, nil
 }
 
 // GetByTimeRange implements repository.IMessageRepository.
 func (m *MessageRepository) GetByTimeRange(ctx context.Context, from time.Time, to time.Time) ([]entity.Message, error) {
-	panic("unimplemented")
+	return nil, nil
 }
 
 // GiveLike implements repository.IMessageRepository.
