@@ -4,6 +4,7 @@ import styles from "./Bubble.module.css";
 import { Heart } from "lucide-react";
 import { useEffect, useState, CSSProperties } from "react";
 
+
 interface BubbleProps {
     bubble: BubbleType;
     onLike: (id: number) => void;
@@ -70,22 +71,32 @@ export default function Bubble({ bubble, onLike, showReplies, toggleReplies, pos
 
             {/* 8個の円だけを表示 */}
             {showReplies && (
-                <div className={styles.repliesContainer} style={{ position: 'absolute', width: '100%', height: '100%' }}>
-                    {replyPositions.map((position, index) => (
-                        <div key={index}
-                             style={{
-                                 position: 'absolute',
-                                 width: `${50+size /4}px`,  // 円の直径
-                                 height: `${50+size /4}px`, // 円の直径
-                                 borderRadius: '50%', // 円を表示するためのスタイル
-                                 backgroundColor: '#f7c8ec', // 円の色
-                                 left: `${position.x + size /2-25-size /8}px`,  // container center offset
-                                 top: `${position.y + size /2-25-size /8}px`,  // container center offset
-                             }}
-                        ></div>
-                    ))}
+    <div className={styles.repliesContainer} style={{ position: 'absolute', width: '100%', height: '100%' }}>
+        {replyPositions.map((position, index) => {
+            const reply = bubble.replies ? bubble.replies[index] : null;
+            return (
+                <div key={index}
+                     style={{
+                         position: 'absolute',
+                         width: `${50 + size / 4}px`,  // 円の直径
+                         height: `${50 + size / 4}px`, // 円の直径
+                         borderRadius: '50%', // 円を表示するためのスタイル
+                         backgroundColor: '#f7c8ec', // 円の色
+                         left: `${position.x + size / 2 - 25 - size / 8}px`,  // container center offset
+                         top: `${position.y + size / 2 - 25 - size / 8}px`,  // container center offset
+                     }}
+                >
+                    {/* reply.text が存在する場合のみ表示 */}
+                    {reply && 
+                    <span className={styles.replyText}>{reply.text}</span>
+                    }
                 </div>
-            )}
+            );
+        })}
+    </div>
+)}
+
+
         </div>
     );
 }
