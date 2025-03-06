@@ -24,6 +24,7 @@ func InitHandler() *handler.Root {
 	iMessageRepository := repository.NewMessageRepository(queries)
 	iMessageService := service.NewMessageService(iMessageRepository)
 	iMessageHandler := handler.NewMessageHandler(iMessageService)
-	root := handler.New(iUserHandler, iMessageHandler)
+	iLikeHandler := handler.NewLikeHandler(iMessageService)
+	root := handler.New(iUserHandler, iMessageHandler, iLikeHandler)
 	return root
 }
