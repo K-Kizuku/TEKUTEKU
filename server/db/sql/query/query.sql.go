@@ -7,8 +7,6 @@ package query
 
 import (
 	"context"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createMessage = `-- name: CreateMessage :one
@@ -26,7 +24,7 @@ type CreateMessageParams struct {
 	X         int32
 	Y         int32
 	Message   string
-	CreatedAt pgtype.Timestamp
+	CreatedAt string
 	FloatTime float32
 }
 

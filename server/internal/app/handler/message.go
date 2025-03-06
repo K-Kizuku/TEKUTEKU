@@ -43,6 +43,7 @@ func (m *MessageHandler) GET() func(http.ResponseWriter, *http.Request) error {
 				X:         v.X,
 				Y:         v.Y,
 				FloatTime: v.FloatTime,
+				CreatedAt: v.CreatedAt.String(),
 			})
 		}
 		res := schema.MessageGETResponse{

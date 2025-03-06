@@ -37,6 +37,7 @@ func (m *MessageService) Create(ctx context.Context, message entity.Message) (*e
 		X:         rand.Intn(5) * 10,
 		Y:         rand.Intn(5) * 10,
 		FloatTime: float32(rand.Intn(10))*0.2 + 5.0,
+		CreatedAt: time.Now(),
 	}
 	created, err := m.mr.Create(ctx, mess)
 	if err != nil {
