@@ -1,0 +1,55 @@
+/* 全体コンテナ */
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+}
+
+/* タイトル */
+.title {
+  font-size: 48px;
+  color: #fff;
+  margin-bottom: 40px;
+  animation: fadeInDown 1s ease-out;
+}
+
+/* ボタン群 */
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ボタン */
+.button {
+  font-size: 24px;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 30px;
+  background-color: #378def;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ボタン ホバー時のアニメーション */
+.button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* タイトルフェードインアニメーション */
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

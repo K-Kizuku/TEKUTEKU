@@ -1,15 +1,19 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./post.module.css";
 
 export default function PostPage() {
+  const router = useRouter();
   const [content, setContent] = useState("");
   const [previewBubble, setPreviewBubble] = useState<string | null>(null);
   const [bubbleAnimating, setBubbleAnimating] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
   const [pointerStartY, setPointerStartY] = useState<number | null>(null);
   const [hintText, setHintText] = useState("上にスワイプしてバブルを送信");
+  const [showCheckmark, setShowCheckmark] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   // 送信ボタン押下時、入力内容をバブルプレビューとして表示
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -18,7 +22,6 @@ export default function PostPage() {
     setPreviewBubble(content);
     setContent("");
     setDragOffset(0);
-    // 初期状態のヒントに戻す
     setHintText("上にスワイプしてバブルを送信");
   };
 
@@ -33,9 +36,7 @@ export default function PostPage() {
     if (pointerStartY === null) return;
     const offsetY = e.clientY - pointerStartY;
     setDragOffset(offsetY);
-    // 下方向には移動させない（offsetYが正の場合は0とする）
     const safeOffset = offsetY < 0 ? offsetY : 0;
-    // しきい値（ここでは -300px 以上移動で送信可能）を超えたらヒントを更新
     if (safeOffset < -300) {
       setHintText("指を離して送信");
     } else {
@@ -55,20 +56,23 @@ export default function PostPage() {
     e.currentTarget.releasePointerCapture(e.pointerId);
   };
 
-  // バブル送信処理（送信時は上方向へアニメーションし、バブルを非表示にする）
+  // バブル送信処理：バブルを上にアニメーションさせた後、チェックマークとモーダルを表示
   const submitBubble = () => {
     setBubbleAnimating(true);
-    // ヒントを「送信済み」に変更
     setHintText("送信済み");
     setTimeout(() => {
       console.log("Bubble submitted:", previewBubble);
       setPreviewBubble(null);
       setBubbleAnimating(false);
       setDragOffset(0);
-    }, 1000); // CSS のアニメーション時間と合わせる
+      setShowCheckmark(true);
+      // チェックマークアニメーション終了後にモーダルを表示（1.5秒後）
+      setTimeout(() => {
+        setShowModal(true);
+      }, 1500);
+    }, 1000);
   };
 
-  // ドラッグ中の場合のみ、dragOffset が初期位置より下（正の値）にならないように制限
   const safeOffset = dragOffset < 0 ? dragOffset : 0;
   const bubbleTransform =
     bubbleAnimating
@@ -76,7 +80,6 @@ export default function PostPage() {
       : pointerStartY !== null
       ? `translateX(-50%) translateY(${safeOffset}px)`
       : "translateX(-50%) translateY(0px)";
-
 
   return (
     <div className={styles.container}>
@@ -105,6 +108,12 @@ export default function PostPage() {
       )}
 
       <form className={styles.postEditArea} onSubmit={handleSubmit}>
+
+        <select className={styles.dropdown}>
+          <option value="東京科学大学">東京科学大学</option>
+          <option value="九州工業大学">九州工業大学</option>
+        </select>
+
         <textarea
           className={styles.textbox}
           placeholder="バブル投稿を入力してください"
@@ -115,6 +124,39 @@ export default function PostPage() {
           送信
         </button>
       </form>
+
+      {/* チェックマークアニメーション */}
+      {showCheckmark && (
+        <div className={styles.checkmark}>✓</div>
+      )}
+
+      {/* モーダル表示 */}
+      {showModal && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <p>再び送信しますか？</p>
+            <div className={styles.modalButtons}>
+              <button
+                className={`${styles.modalButton} ${styles.yes}`}
+                onClick={() => {
+                  setShowModal(false);
+                  setShowCheckmark(false);
+                }}
+              >
+                はい
+              </button>
+              <button
+                className={`${styles.modalButton} ${styles.no}`}
+                onClick={() => {
+                  router.push("./home");
+                }}
+              >
+                いいえ
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
