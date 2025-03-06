@@ -3,8 +3,9 @@ import type { BubbleType } from "./types"
 export const bubbleData: BubbleType[] = [
   {
     id: 1,
+    school:1,
     text: "Next.jsはモダンなWebアプリケーションの構築に最適です！",
-    likes: 42,
+    likes: 12,
     x: 200,
     y: 400,
     date: new Date(),
@@ -17,9 +18,10 @@ export const bubbleData: BubbleType[] = [
   },
   {
     id: 2,
+    school:2,
     text: "TypeScriptは開発体験を大きく改善してくれました",
-    likes: 28,
-    x: 300,
+    likes: 8,
+    x: 400,
     y: 250,
     date: new Date(),
     replies: [
@@ -29,6 +31,7 @@ export const bubbleData: BubbleType[] = [
   },
   {
     id: 3,
+    school:1,
     text: "CSS Modulesはコンポーネントスコープのスタイリングに最適です",
     likes: 15,
     x: 600,
@@ -42,8 +45,9 @@ export const bubbleData: BubbleType[] = [
   },
   {
     id: 4,
+    school:2,
     text: "Reactの状態管理で一番好きなものは何ですか？",
-    likes: 33,
+    likes: 13,
     x: 1000,
     y: 500,
     date: new Date(),
@@ -56,8 +60,9 @@ export const bubbleData: BubbleType[] = [
   },
   {
     id: 5,
+    school:1,
     text: "2023年にWeb開発を学ぶのは時々圧倒されます",
-    likes: 56,
+    likes: 20,
     x: 700,
     y: 290,
     date: new Date(),
@@ -69,8 +74,9 @@ export const bubbleData: BubbleType[] = [
   },
   {
     id: 6,
+    school:2,
     text: "Reactの良いUIコンポーネントライブラリは何ですか？",
-    likes: 19,
+    likes: 2,
     x: 1300,
     y: 100,
     date: new Date(),
@@ -82,8 +88,9 @@ export const bubbleData: BubbleType[] = [
   },
   {
     id: 7,
+    school:1,
     text: "初めてNext.jsアプリをVercelにデプロイしました！",
-    likes: 38,
+    likes: 18,
     x: 1200,
     y: 300,
     date: new Date(),
@@ -95,6 +102,7 @@ export const bubbleData: BubbleType[] = [
   },
   {
     id: 8,
+    school:2,
     text: "アニメーションにFramer Motionを使っている人いますか？",
     likes: 22,
     x: 130,
@@ -105,22 +113,28 @@ export const bubbleData: BubbleType[] = [
       { id: 802, text: "APIがとても直感的です" },
     ],
   },
+  {
+    id: 10,
+    school:1,
+    text: "新しい細胞です",
+    likes: 0,
+    x: 1100,
+    y: 100,
+    date: new Date(),
+    
+  },
 ];
 
 
 export const newbubbleData: BubbleType[] = [
     {
       id: 10,
-      text: "Next.jsはモダンなWebアプリケーションの構築に最適です！",
-      likes: 42,
-      x: 1400,
+      school:1,
+      text: "新しい細胞です",
+      likes: 0,
+      x: 1100,
       y: 100,
       date: new Date(),
-      replies: [
-        { id: 101, text: "完全に同意します！" },
-        { id: 102, text: "SSRの機能は革命的ですね" },
-        { id: 103, text: "でもRemixの方が好きです" },
-        { id: 104, text: "App Routerを試しましたか？" },
-      ],
+      
     },
 ];
