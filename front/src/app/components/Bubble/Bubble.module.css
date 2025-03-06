@@ -71,50 +71,7 @@
     font-size: 0.7rem;
     color: #333;
   }
-  
-  .repliesContainer {
-    position: absolute;
-    width: 0;
-    height: 0;
-    z-index: 0;
-  }
-  
-  .replyBubble {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: rgba(255, 182, 193, 0.8);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 0.5s forwards;
-    transform-origin: center;
-  }
-  
-  .replyText {
-    font-size: 0.7rem;
-    color: #333;
-    text-align: center;
-    word-break: break-word;
-    max-height: 80%;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-  }
-  
-  .replyLikes {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    font-size: 0.6rem;
-    color: #ff6b6b;
-    margin-top: 4px;
-  }
+
   
   @keyframes float {
     0% {
@@ -128,19 +85,6 @@
     }
   }
   
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
 
-  .bubbleContainer {
-    position: absolute;
-    transition: all 0.3s ease;
-}
+
 
