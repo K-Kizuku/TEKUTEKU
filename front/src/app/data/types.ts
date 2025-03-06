@@ -1,7 +1,6 @@
 export interface ReplyType {
   id: number
   text: string
-
 }
 
 export interface BubbleType {
