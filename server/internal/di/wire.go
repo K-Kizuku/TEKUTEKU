@@ -21,6 +21,7 @@ func InitHandler() *handler.Root {
 		service.NewUserService,
 		handler.NewMessageHandler,
 		handler.NewUserHandler,
+		handler.NewLikeHandler,
 		handler.New,
 	)
 	return &handler.Root{}

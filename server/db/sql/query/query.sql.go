@@ -15,7 +15,7 @@ INSERT INTO users (
 ) VALUES (
   $1, $2, $3, $4
 )
-RETURNING user_id, mail, name, hashed_password
+RETURNING user_id, mail, name, belong, hashed_password
 `
 
 type CreateUserParams struct {
@@ -37,6 +37,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.UserID,
 		&i.Mail,
 		&i.Name,
+		&i.Belong,
 		&i.HashedPassword,
 	)
 	return i, err
@@ -47,9 +48,16 @@ SELECT user_id, mail, name, hashed_password FROM users
 WHERE mail = $1 LIMIT 1
 `
 
-func (q *Queries) GetUserByEmail(ctx context.Context, mail string) (User, error) {
+type GetUserByEmailRow struct {
+	UserID         string
+	Mail           string
+	Name           string
+	HashedPassword string
+}
+
+func (q *Queries) GetUserByEmail(ctx context.Context, mail string) (GetUserByEmailRow, error) {
 	row := q.db.QueryRow(ctx, getUserByEmail, mail)
-	var i User
+	var i GetUserByEmailRow
 	err := row.Scan(
 		&i.UserID,
 		&i.Mail,
@@ -64,44 +72,34 @@ SELECT user_id, mail, name, hashed_password FROM users
 WHERE user_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetUserByID(ctx context.Context, userID string) (User, error) {
-	row := q.db.QueryRow(ctx, getUserByID, userID)
-	var i User
-	err := row.Scan(
-		&i.UserID,
-		&i.Mail,
-		&i.Name,
-		&i.HashedPassword,
-	)
-	return i, err
-}
-
-const getUserByIDWithEisaFiles = `-- name: GetUserByIDWithEisaFiles :one
-SELECT u.user_id, u.mail, u.name, u.hashed_password, ef.file_path
-FROM users u
-INNER JOIN eisa_files ef USING (user_id)
-WHERE u.user_id = $1
-`
-
-type GetUserByIDWithEisaFilesRow struct {
+type GetUserByIDRow struct {
 	UserID         string
 	Mail           string
 	Name           string
 	HashedPassword string
-	FilePath       string
 }
 
-func (q *Queries) GetUserByIDWithEisaFiles(ctx context.Context, userID string) (GetUserByIDWithEisaFilesRow, error) {
-	row := q.db.QueryRow(ctx, getUserByIDWithEisaFiles, userID)
-	var i GetUserByIDWithEisaFilesRow
+func (q *Queries) GetUserByID(ctx context.Context, userID string) (GetUserByIDRow, error) {
+	row := q.db.QueryRow(ctx, getUserByID, userID)
+	var i GetUserByIDRow
 	err := row.Scan(
 		&i.UserID,
 		&i.Mail,
 		&i.Name,
 		&i.HashedPassword,
-		&i.FilePath,
 	)
 	return i, err
+}
+
+const incrementLikes = `-- name: IncrementLikes :exec
+UPDATE messages
+  set likes = likes + 1
+WHERE message_id = $1
+`
+
+func (q *Queries) IncrementLikes(ctx context.Context, messageID string) error {
+	_, err := q.db.Exec(ctx, incrementLikes, messageID)
+	return err
 }
 
 const updatePassword = `-- name: UpdatePassword :exec
@@ -142,26 +140,5 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) error {
 		arg.Name,
 		arg.HashedPassword,
 	)
-	return err
-}
-
-const upsertEisaFile = `-- name: UpsertEisaFile :exec
-WITH updated AS (
-  UPDATE eisa_files
-  SET deleted_at = CURRENT_TIMESTAMP
-  WHERE user_id = $1
-  RETURNING user_id, file_path, created_at, deleted_at
-)
-INSERT INTO eisa_files (user_id, file_path)
-VALUES ($1, $2)
-`
-
-type UpsertEisaFileParams struct {
-	UserID   string
-	FilePath string
-}
-
-func (q *Queries) UpsertEisaFile(ctx context.Context, arg UpsertEisaFileParams) error {
-	_, err := q.db.Exec(ctx, upsertEisaFile, arg.UserID, arg.FilePath)
 	return err
 }

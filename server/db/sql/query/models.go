@@ -5,25 +5,67 @@
 package query
 
 import (
+	"database/sql/driver"
+	"fmt"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type ColorCode struct {
-	UserID     string
-	ColorCode1 string
-	ColorCode2 string
+type University string
+
+const (
+	UniversityTakiPlaza University = "taki_plaza"
+	UniversityGymlab    University = "gymlab"
+	UniversityPorto     University = "porto"
+)
+
+func (e *University) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = University(s)
+	case string:
+		*e = University(s)
+	default:
+		return fmt.Errorf("unsupported scan type for University: %T", src)
+	}
+	return nil
 }
 
-type EisaFile struct {
+type NullUniversity struct {
+	University University
+	Valid      bool // Valid is true if University is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullUniversity) Scan(value interface{}) error {
+	if value == nil {
+		ns.University, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.University.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullUniversity) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.University), nil
+}
+
+type Message struct {
+	MessageID string
 	UserID    string
-	FilePath  string
+	Message   string
 	CreatedAt pgtype.Timestamp
-	DeletedAt pgtype.Timestamp
+	Likes     int32
 }
 
 type User struct {
 	UserID         string
 	Mail           string
 	Name           string
+	Belong         University
 	HashedPassword string
 }

@@ -26,3 +26,9 @@ UPDATE users
   set hashed_password = $2
 WHERE user_id = $1;
 
+
+-- name: IncrementLikes :exec
+UPDATE messages
+  set likes = likes + 1
+WHERE message_id = $1;
+

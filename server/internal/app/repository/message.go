@@ -36,3 +36,11 @@ func (m *MessageRepository) GetByID(ctx context.Context, id string) (*entity.Mes
 func (m *MessageRepository) GetByTimeRange(ctx context.Context, from time.Time, to time.Time) ([]entity.Message, error) {
 	panic("unimplemented")
 }
+
+// GiveLike implements repository.IMessageRepository.
+func (m *MessageRepository) GiveLike(ctx context.Context, id string) error {
+	if err := m.queries.IncrementLikes(ctx, id); err != nil {
+		return err
+	}
+	return nil
+}
