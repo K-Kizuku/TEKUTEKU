@@ -24,7 +24,7 @@ func New() *query.Queries {
 
 func Init() (*pgx.Conn, error) {
 	if env.Mode == "dev" {
-		conn, err := pgx.Connect(context.Background(), "postgres://hackz:password@app-network:5432/tekuteku?sslmode=disable")
+		conn, err := pgx.Connect(context.Background(), "postgres://hackz:password@db:5432/tekuteku?sslmode=disable")
 		if err != nil {
 			return nil, err
 		}
