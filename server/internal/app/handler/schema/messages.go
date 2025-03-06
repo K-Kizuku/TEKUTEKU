@@ -9,7 +9,6 @@ type MessagePOSTResponse struct {
 
 type MessageGETResponse struct {
 	Messages []Message `json:"messages"`
-	School   int       `json:"number"`
 }
 
 type Message struct {
@@ -20,4 +19,5 @@ type Message struct {
 	Y         int     `json:"Y"`
 	FloatTime float32 `json:"float_time"`
 	CreatedAt string  `json:"created_at"`
+	School    int     `json:"school"`
 }
