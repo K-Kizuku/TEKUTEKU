@@ -35,6 +35,8 @@ func main() {
 	mux.Handle("GET /messages", handler.AppHandler(h.MessageHandler.GET()))
 	mux.Handle("POST /messages", handler.AppHandler(h.MessageHandler.POST()))
 
+	mux.Handle("POST /like", handler.AppHandler(h.LikeHandler.POST()))
+
 	handler := middleware.Chain(mux, middleware.Context, middleware.Logger, middleware.Recover)
 
 	server := &http.Server{
