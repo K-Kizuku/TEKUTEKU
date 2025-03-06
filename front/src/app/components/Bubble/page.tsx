@@ -13,7 +13,7 @@ interface BubbleProps {
 }
 
 export default function Bubble({ bubble, onLike, showReplies, toggleReplies, position }: BubbleProps) {
-    const size = 50 + bubble.likes * 5;
+    const size = 100 + bubble.likes * 5;
     const [animationDelay, setAnimationDelay] = useState<string | null>(null);
     const [isClicked, setIsClicked] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
@@ -62,6 +62,8 @@ export default function Bubble({ bubble, onLike, showReplies, toggleReplies, pos
         }
     };
 
+    
+
     return (
         <div
             className={`${styles.bubbleContainer} ${isClicked ? styles.clicked : ''}`}
@@ -97,7 +99,7 @@ export default function Bubble({ bubble, onLike, showReplies, toggleReplies, pos
                                     width: `${50 + size / 4}px`,
                                     height: `${50 + size / 4}px`, 
                                     borderRadius: '50%',
-                                    background: 'linear-gradient(to top, #feada6 0%, #f5efef 100%)', 
+                                    background: 'linear-gradient(to top, #6bffb5 0%, #6bffb5 80%)', 
                                     left: `${position.x + size / 2 - 25 - size / 8}px`,
                                     top: `${position.y + size / 2 - 25 - size / 8}px`,
                                     '--bubble-index': index,

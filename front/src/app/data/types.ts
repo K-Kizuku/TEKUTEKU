@@ -4,6 +4,7 @@ export interface ReplyType {
 }
 
 export interface BubbleType {
+  school:number
   id: number
   text: string
   likes: number
