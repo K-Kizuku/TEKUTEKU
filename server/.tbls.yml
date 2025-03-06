@@ -1,0 +1,5 @@
+# DSN (Database Source Name) to connect database
+dsn: postgres://hackz:password@localhost:5432/tekuteku?sslmode=disable
+# Path to generate document
+# Default is `dbdoc`
+docPath: docs/database

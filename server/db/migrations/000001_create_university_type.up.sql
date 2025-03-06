@@ -1,0 +1,1 @@
+CREATE TYPE university AS ENUM ('taki_plaza', 'gymlab', 'porto');
