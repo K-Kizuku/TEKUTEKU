@@ -57,7 +57,39 @@ export default function PostPage() {
   };
 
   // バブル送信処理：バブルを上にアニメーションさせた後、チェックマークとモーダルを表示
-  const submitBubble = () => {
+  const submitBubble = async() => {
+
+    // 送信処理
+
+    try{
+      const response = await fetch('/api/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          // text: sendText,
+          // schoolId: sid, 
+        }),
+      });
+
+      if (response.ok) {
+        alert('投稿が成功しました');
+      } else {
+        alert('投稿に失敗しました');
+      }
+    } catch (error) {
+      console.error('エラー:', error);
+      alert('投稿中にエラーが発生しました');
+    }
+
+    // 送信処理ここまで
+
+
+
+
+
+
     setBubbleAnimating(true);
     setHintText("送信済み");
     setTimeout(() => {
