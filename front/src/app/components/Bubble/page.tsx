@@ -16,6 +16,7 @@ export default function Bubble({ bubble, onLike, showReplies, toggleReplies, pos
     const size = 50 + bubble.likes * 5;
     const [animationDelay, setAnimationDelay] = useState<string | null>(null);
     const [isClicked, setIsClicked] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
 
     useEffect(() => {
         setAnimationDelay(`${Math.random() * 3}s`);
@@ -30,8 +31,8 @@ export default function Bubble({ bubble, onLike, showReplies, toggleReplies, pos
         zIndex: isClicked ? 9999 : 1,
     };
 
-    // 8個の円を表示するための計算
-    const replyRadius = size*0.8;
+    // Calculate positions for the 8 reply bubbles
+    const replyRadius = size * 0.8;
     const calculateReplyPositions = (numReplies: number) => {
         return Array.from({ length: numReplies }, (_, i) => {
             const angle = (i * 2 * Math.PI) / numReplies;
@@ -42,70 +43,76 @@ export default function Bubble({ bubble, onLike, showReplies, toggleReplies, pos
         });
     };
 
-    // 8個の円に対応する位置を計算
     const replyPositions = calculateReplyPositions(8);
+
+    // Handle toggling the replies with animation
+    const handleToggleReplies = () => {
+        if (showReplies) {
+            setIsClosing(true);
+            setTimeout(() => {
+                toggleReplies();
+                setIsClosing(false);
+            }, 400); // Match this to the disappear animation duration
+        } else {
+            setIsClicked(true);
+            toggleReplies();
+            setTimeout(() => {
+                setIsClicked(false);
+            }, 500); // Match this to the pulse animation duration
+        }
+    };
 
     return (
         <div className={styles.bubbleContainer} style={bubbleStyle}>
-            <div
-                className={styles.bubble}
-                onClick={() => {
-                    setIsClicked(!isClicked);
-                    toggleReplies();
-                }}
-            >
-                <span className={styles.bubbleText}>{bubble.text}</span>
-            </div>
-
-            <button
-                className={styles.likeButton}
-                onClick={(e) => {
-                    e.stopPropagation();
-                    onLike(bubble.id);
-                }}
-            >
-                <Heart size={16} className={styles.heartIcon} />
-                <span className={styles.likeCount}>{bubble.likes}</span>
-            </button>
-
-
-
-            {/* 8個の円だけを表示 */}
-
-            {showReplies && (
-    <div className={styles.repliesContainer} style={{ position: 'absolute', width: '100%', height: '100%' }}>
-        {replyPositions.map((position, index) => {
-            const reply = bubble.replies ? bubble.replies[index] : null;
-            return (
-                <div key={index}
-                     style={{
-                         position: 'absolute',
-                         width: `${50 + size / 4}px`,  // 円の直径
-                         height: `${50 + size / 4}px`, // 円の直径
-                         borderRadius: '50%', // 円を表示するためのスタイル
-                         backgroundColor: '#f7c8ec', // 円の色
-                         left: `${position.x + size / 2 - 25 - size / 8}px`,  // container center offset
-                         top: `${position.y + size / 2 - 25 - size / 8}px`,  // container center offset
-                     }}
+            
+                <div
+                    className={`${styles.bubble} ${isClicked ? styles.clicked : ''}`}
+                    onClick={handleToggleReplies}
                 >
-                    {/* テキストを円の中心に配置 */}
-                    {reply && (
-                        <span className={styles.replyText} style={{
-                            position: 'absolute',
-                            top: '50%',
-                            left: '50%',
-                            transform: 'translate(-50%, -50%)', // 中央揃え
-                        }}>
-                            {reply.text}
-                        </span>
-                    )}
+                    <span className={styles.bubbleText}>{bubble.text}</span>
                 </div>
-            );
-        })}
-    </div>
-)}
 
+                <button
+                    className={styles.likeButton}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onLike(bubble.id);
+                    }}
+                >
+                    <Heart size={16} className={styles.heartIcon} />
+                    <span className={styles.likeCount}>{bubble.likes}</span>
+                </button>
+            
 
+            {/* Display reply bubbles */}
+            {(showReplies || isClosing) && (
+                <div className={`${styles.repliesContainer} ${isClosing ? styles.closing : ''}`}>
+                    {replyPositions.map((position, index) => {
+                        const reply = bubble.replies ? bubble.replies[index] : null;
+                        return (
+                            <div 
+                                key={index} 
+                                style={{
+                                    position: 'absolute',
+                                    width: `${50 + size / 4}px`,
+                                    height: `${50 + size / 4}px`, 
+                                    borderRadius: '50%',
+                                    backgroundColor: '#f7c8ec',
+                                    left: `${position.x + size / 2 - 25 - size / 8}px`,
+                                    top: `${position.y + size / 2 - 25 - size / 8}px`,
+                                    '--bubble-index': index, // Custom property for animation calculations
+                                } as CSSProperties}
+                            >
+                                {reply && (
+                                    <span className={styles.replyText}>
+                                        {reply.text}
+                                    </span>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
         </div>
     );
 }
