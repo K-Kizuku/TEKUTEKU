@@ -1,12 +1,13 @@
 .container {
   position: relative;
-  background: #f0f0f0;
+  background:red;
 }
 .scrollContainer {
   width: 100vw;
   height: 100vh;
   overflow: auto;
   position: relative;
+  
 }
 
 

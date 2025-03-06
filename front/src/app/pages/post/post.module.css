@@ -1,10 +1,56 @@
+/* 全体コンテナ */
 .container {
   position: relative;
   min-height: 100vh;
-  padding-bottom: 100px; /* フォーム分の余白 */
+  padding-bottom: 120px;
   box-sizing: border-box;
+  background-color: #e5faff;
 }
 
+/* ヒント表示 */
+.hint {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: 600;
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgb(156, 255, 192);
+  color: #4e4e4e;
+  padding: 8px 10px;
+  border-radius: 4px;
+  font-size: 18px;
+  z-index: 1000;
+}
+
+/* バブルプレビュー部分 */
+.bubblePreview {
+  position: fixed;
+  bottom: 270px;
+  left: 50%;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4a4a4a;
+  font-size: 16px;
+  text-align: center;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 100;
+}
+
+/* バブル内の投稿内容 */
+.bubbleContent {
+  word-wrap: break-word;
+}
+
+/* 下部固定の投稿フォーム */
 .postEditArea {
   position: fixed;
   bottom: 0;
@@ -15,35 +61,43 @@
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   box-sizing: border-box;
+  z-index: 200;
 }
 
+/* テキストエリア */
 .postEditArea textarea {
   width: 100%;
   min-height: 80px;
-  padding: 8px;
+  padding: 12px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 20px;
   resize: none;
   box-sizing: border-box;
+  font-size: 22px;
 }
 
+/* 送信ボタン */
 .postEditArea button {
   align-self: flex-end;
   padding: 8px 16px;
-  background-color: #0070f3;
+  background-color: #378def;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 20px;
+  font-size: 22px;
   cursor: pointer;
 }
 
+/* ボタンホバー */
 .postEditArea button:hover {
   background-color: #005bb5;
 }
 
-/* 画面サイズが広い場合のレイアウト調整 */
+/* PC用レイアウト */
 @media screen and (min-width: 768px) {
   .postEditArea {
     flex-direction: row;
@@ -56,4 +110,148 @@
     margin-right: 10px;
     min-height: 40px;
   }
+
+  .bubblePreview {
+    bottom: 150px;
+  }
 }
+
+/* 流れ星エフェクト用コンテナ */
+.shootingStars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* 各流れ星 */
+.shootingStar {
+  position: absolute;
+  top: 100vh;
+  width: 2px;
+  height: 80px;
+  background: linear-gradient(to top, rgba(255,255,255,0) 0%, rgb(12, 138, 152) 50%, rgba(255,255,255,0) 100%);
+  animation: shooting 3s linear infinite;
+}
+
+/* 各流れ星の配置 */
+.shootingStar:nth-child(1) { left: 10%; animation-delay: 0s; }
+.shootingStar:nth-child(2) { left: 30%; animation-delay: 0.5s; }
+.shootingStar:nth-child(3) { left: 50%; animation-delay: 1s; }
+.shootingStar:nth-child(4) { left: 70%; animation-delay: 1.5s; }
+.shootingStar:nth-child(5) { left: 90%; animation-delay: 2s; }
+.shootingStar:nth-child(6) { left: 20%; animation-delay: 2.5s; }
+.shootingStar:nth-child(7) { left: 40%; animation-delay: 3s; }
+.shootingStar:nth-child(8) { left: 60%; animation-delay: 3.5s; }
+.shootingStar:nth-child(9) { left: 80%; animation-delay: 4s; }
+.shootingStar:nth-child(10) { left: 50%; animation-delay: 4.5s; }
+
+/* 流れ星アニメーション */
+@keyframes shooting {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-110vh);
+    opacity: 0;
+  }
+}
+
+/* チェックマークアニメーション */
+.checkmark {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 80px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  font-size: 100px;
+  color: #4CAF50;
+  opacity: 0;
+  z-index: 1100;
+  animation: checkmarkAnimation 1.5s forwards;
+}
+
+@keyframes checkmarkAnimation {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* モーダル全体 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* モーダル内コンテンツ */
+.modalContent {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* モーダル内ボタン群 */
+.modalButtons {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* モーダルボタン */
+.modalButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.modalButton.yes {
+  background-color: #378def;
+  color: #fff;
+}
+
+.modalButton.no {
+  background-color: #f44336;
+  color: #fff;
+}
+
+
+/* プルダウンのスタイル */
+.dropdown {
+  padding: 8px 12px;
+  margin: 10px 8px 10px 8px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 22px;
+  background-color: #fff;
+}
+

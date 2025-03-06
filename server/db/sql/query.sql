@@ -28,3 +28,9 @@ WHERE user_id = $1;
 
 -- name: GetAllMessage :many
 SELECT * from messages;
+
+-- name: IncrementLikes :exec
+UPDATE messages
+  set likes = likes + 1
+WHERE message_id = $1;
+

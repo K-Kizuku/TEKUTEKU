@@ -124,6 +124,17 @@ func (q *Queries) GetUserByID(ctx context.Context, userID string) (GetUserByIDRo
 	return i, err
 }
 
+const incrementLikes = `-- name: IncrementLikes :exec
+UPDATE messages
+  set likes = likes + 1
+WHERE message_id = $1
+`
+
+func (q *Queries) IncrementLikes(ctx context.Context, messageID string) error {
+	_, err := q.db.Exec(ctx, incrementLikes, messageID)
+	return err
+}
+
 const updatePassword = `-- name: UpdatePassword :exec
 UPDATE users
   set hashed_password = $2

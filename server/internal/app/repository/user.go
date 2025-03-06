@@ -18,7 +18,7 @@ func NewUserRepository(queries *query.Queries) repository.IUserRepository {
 }
 
 func (r *UserRepository) FindUserByID(ctx context.Context, id string) (*entity.User, error) {
-	user, err := r.queries.GetUserByIDWithEisaFiles(ctx, id)
+	user, err := r.queries.GetUserByID(ctx, id)
 	if err != nil {
 		return nil, errors.HandleDBError(err)
 	}
@@ -68,17 +68,6 @@ func (r *UserRepository) UpdatePassword(ctx context.Context, id, password string
 	err := r.queries.UpdatePassword(ctx, query.UpdatePasswordParams{
 		UserID:         id,
 		HashedPassword: password,
-	})
-	if err != nil {
-		return errors.HandleDBError(err)
-	}
-	return nil
-}
-
-func (r *UserRepository) UpdateEisaFile(ctx context.Context, id, eisaFile string) error {
-	err := r.queries.UpsertEisaFile(ctx, query.UpsertEisaFileParams{
-		UserID:   id,
-		FilePath: eisaFile,
 	})
 	if err != nil {
 		return errors.HandleDBError(err)

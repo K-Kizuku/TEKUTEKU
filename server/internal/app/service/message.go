@@ -13,6 +13,7 @@ type IMessageService interface {
 	GetByID(ctx context.Context, id string) (*entity.Message, error)
 	GetByTimeRange(ctx context.Context, from, to time.Time) ([]entity.Message, error)
 	Create(ctx context.Context, message entity.Message) (*entity.Message, error)
+	GiveLike(ctx context.Context, id string) error
 }
 
 type MessageService struct {
@@ -43,4 +44,12 @@ func (m *MessageService) GetByID(ctx context.Context, id string) (*entity.Messag
 // GetByTimeRange implements IMessageService.
 func (m *MessageService) GetByTimeRange(ctx context.Context, from time.Time, to time.Time) ([]entity.Message, error) {
 	panic("unimplemented")
+}
+
+// GiveLike implements IMessageService.
+func (m *MessageService) GiveLike(ctx context.Context, id string) error {
+	if err := m.mr.GiveLike(ctx, id); err != nil {
+		return err
+	}
+	return nil
 }
