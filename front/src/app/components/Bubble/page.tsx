@@ -31,14 +31,13 @@ export default function Bubble({ bubble, onLike, showReplies, toggleReplies, pos
     };
 
     // 8個の円を表示するための計算
-    const replyRadius = size + 50;
+    const replyRadius = size*0.8;
     const calculateReplyPositions = (numReplies: number) => {
         return Array.from({ length: numReplies }, (_, i) => {
             const angle = (i * 2 * Math.PI) / numReplies;
             return {
                 x: replyRadius * Math.cos(angle),
                 y: replyRadius * Math.sin(angle),
-                angle,
             };
         });
     };
@@ -69,30 +68,21 @@ export default function Bubble({ bubble, onLike, showReplies, toggleReplies, pos
                 <span className={styles.likeCount}>{bubble.likes}</span>
             </button>
 
+            {/* 8個の円だけを表示 */}
             {showReplies && (
-                <div className={styles.repliesContainer}>
-                    {/* 8個の円に対応する円を表示 */}
+                <div className={styles.repliesContainer} style={{ position: 'absolute', width: '100%', height: '100%' }}>
                     {replyPositions.map((position, index) => (
-                        <div key={index} className={styles.replyWrapper}>
-                            <div
-                                style={{
-                                    position: 'absolute',
-                                    width: `${replyRadius * 2}px`,
-                                    height: '1px',
-                                    backgroundColor: '#e0e0e0',
-                                    transform: `rotate(${position.angle * (180 / Math.PI)}deg)`,
-                                    transformOrigin: '0% 50%',
-                                    zIndex: -1,
-                                }}
-                            ></div>
-
-                            <div
-                                className={styles.replyBubble}
-                                style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
-                            >
-                                <span className={styles.replyText}>Reply {index + 1}</span>
-                            </div>
-                        </div>
+                        <div key={index}
+                             style={{
+                                 position: 'absolute',
+                                 width: `${50+size /4}px`,  // 円の直径
+                                 height: `${50+size /4}px`, // 円の直径
+                                 borderRadius: '50%', // 円を表示するためのスタイル
+                                 backgroundColor: '#f7c8ec', // 円の色
+                                 left: `${position.x + size /2-25-size /8}px`,  // container center offset
+                                 top: `${position.y + size /2-25-size /8}px`,  // container center offset
+                             }}
+                        ></div>
                     ))}
                 </div>
             )}
