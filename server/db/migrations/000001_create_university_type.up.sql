@@ -1,1 +1,1 @@
-CREATE TYPE university AS ENUM ('taki_plaza', 'gymlab', 'porto');
+CREATE TYPE university AS ENUM ('kyutech', 'science tokyo');

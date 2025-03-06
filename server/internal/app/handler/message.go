@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"encoding/json"
+	"github.com/0-s0g0/TEKUTEKU/server/internal/app/handler/schema"
 	"net/http"
 
 	"github.com/0-s0g0/TEKUTEKU/server/internal/app/service"
@@ -23,7 +25,33 @@ func NewMessageHandler(ms service.IMessageService) IMessageHandler {
 
 // GET implements IMessageHandler.
 func (m *MessageHandler) GET() func(http.ResponseWriter, *http.Request) error {
-	panic("unimplemented")
+	return func(w http.ResponseWriter, s *http.Request) error {
+		message, err := m.ms.GetAll(s.Context())
+		if err != nil {
+			return err
+		}
+		m := make([]schema.Message, 0, len(message))
+		for _, v := range message {
+			m = append(m, schema.Message{
+				ID:        v.ID,
+				Message:   v.Message,
+				Likes:     v.Likes,
+				X:         v.X,
+				Y:         v.Y,
+				FloatTime: v.FloatTime,
+			})
+		}
+		res := schema.MessageGETResponse{
+			Messages: m,
+			School:   1,
+		}
+		if err := json.NewEncoder(w).Encode(res); err != nil {
+			return err
+		}
+		w.WriteHeader(http.StatusCreated)
+		return nil
+
+	}
 }
 
 // POST implements IMessageHandler.
