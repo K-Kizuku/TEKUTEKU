@@ -1,30 +1,66 @@
-.bubbleContainer {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: float 5s ease-in-out infinite;
-}
 
+.bubbleContainer {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: float 5s ease-in-out infinite;
+    z-index: 1; /* クリック前のバブルのデフォルト */
+  }
 .bubble {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: rgba(173, 216, 230, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  padding: 5px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  overflow: hidden;
-  text-align: center;
-  padding: 10px;
-  position: absolute;
-  z-index: 2;
-}
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    text-align: center;
+    padding: 10px;
+    position: absolute;
+    z-index: 2; /* 通常のz-index */
+  }
+  
+  .bubble.clicked {
+    animation: pulse 0.5s;
+    z-index: 20000; /* クリックしたバブルを最前面に */
+  }
+  
+  
+   /* クリック時、リプライのコンテナも最前面に */
+   .repliesContainer {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 19999; /* バブルより少し低いが、ほぼ最前面 */
+  }
+  
+  /* クリック時にリプライを最前面に */
+  .bubble.clicked + .repliesContainer {
+    z-index: 20001; /* クリック時のリプライの最前面 */
+  }
+  
+  
+  .repliesContainer > div {
+    opacity: 0;
+    transform: scale(0);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: appearWithTrail 0.8s forwards;
+    z-index: 20002; /* すべてのリプライを最前面に */
+    position: absolute;
+    overflow: hidden;
+  }
+  
 
   
   .bubble:hover {
@@ -85,25 +121,7 @@
   }
   
   /* Replies */
-  .repliesContainer {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index:9999;
-  }
-  
-  /* Individual reply bubble animation and styling */
-  .repliesContainer > div {
-    opacity: 0;
-    transform: scale(0);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    animation: appearWithTrail 0.8s forwards;
-    overflow: hidden;
-  }
+
   
   /* Clockwise appearance animation with delay for each bubble */
   .repliesContainer > div:nth-child(1) { animation-delay: 0.1s; }
@@ -157,10 +175,6 @@
     }
   }
   
-  /* Pulse effect when bubble is clicked */
-  .bubble.clicked {
-    animation: pulse 0.5s;
-  }
   
   @keyframes pulse {
     0% { transform: scale(1); }

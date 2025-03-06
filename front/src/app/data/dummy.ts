@@ -106,3 +106,21 @@ export const bubbleData: BubbleType[] = [
     ],
   },
 ];
+
+
+export const newbubbleData: BubbleType[] = [
+    {
+      id: 10,
+      text: "Next.jsはモダンなWebアプリケーションの構築に最適です！",
+      likes: 42,
+      x: 1400,
+      y: 100,
+      date: new Date(),
+      replies: [
+        { id: 101, text: "完全に同意します！" },
+        { id: 102, text: "SSRの機能は革命的ですね" },
+        { id: 103, text: "でもRemixの方が好きです" },
+        { id: 104, text: "App Routerを試しましたか？" },
+      ],
+    },
+];

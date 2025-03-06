@@ -63,28 +63,28 @@ export default function Bubble({ bubble, onLike, showReplies, toggleReplies, pos
     };
 
     return (
-        <div className={styles.bubbleContainer} style={bubbleStyle}>
-            
-                <div
-                    className={`${styles.bubble} ${isClicked ? styles.clicked : ''}`}
-                    onClick={handleToggleReplies}
-                >
-                    <span className={styles.bubbleText}>{bubble.text}</span>
-                </div>
-
-                <button
-                    className={styles.likeButton}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onLike(bubble.id);
-                    }}
-                >
-                    <Heart size={16} className={styles.heartIcon} />
-                    <span className={styles.likeCount}>{bubble.likes}</span>
-                </button>
-            
-
-            {/* Display reply bubbles */}
+        <div
+            className={`${styles.bubbleContainer} ${isClicked ? styles.clicked : ''}`}
+            style={bubbleStyle}
+        >
+            <div
+                className={`${styles.bubble} ${isClicked ? styles.clicked : ''}`}
+                onClick={handleToggleReplies}
+            >
+                <span className={styles.bubbleText}>{bubble.text}</span>
+            </div>
+    
+            <button
+                className={styles.likeButton}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onLike(bubble.id);
+                }}
+            >
+                <Heart size={16} className={styles.heartIcon} />
+                <span className={styles.likeCount}>{bubble.likes}</span>
+            </button>
+    
             {(showReplies || isClosing) && (
                 <div className={`${styles.repliesContainer} ${isClosing ? styles.closing : ''}`}>
                     {replyPositions.map((position, index) => {
@@ -97,10 +97,11 @@ export default function Bubble({ bubble, onLike, showReplies, toggleReplies, pos
                                     width: `${50 + size / 4}px`,
                                     height: `${50 + size / 4}px`, 
                                     borderRadius: '50%',
-                                    backgroundColor: '#f7c8ec',
+                                    background: 'linear-gradient(to top, #feada6 0%, #f5efef 100%)', 
                                     left: `${position.x + size / 2 - 25 - size / 8}px`,
                                     top: `${position.y + size / 2 - 25 - size / 8}px`,
-                                    '--bubble-index': index, // Custom property for animation calculations
+                                    '--bubble-index': index,
+                                    zIndex: 20002, // すべてのリプライを最前面に
                                 } as CSSProperties}
                             >
                                 {reply && (
@@ -115,4 +116,5 @@ export default function Bubble({ bubble, onLike, showReplies, toggleReplies, pos
             )}
         </div>
     );
+    
 }
