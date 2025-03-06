@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1 className={styles.title}>Bubble Thoughts</h1>
+        <h1 className={styles.title}>デモ</h1>
         <BubbleVis bubbles={data} onLike={handleLike} />
       </main>
     </div>
