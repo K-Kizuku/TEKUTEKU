@@ -47,8 +47,8 @@ func (h *UserHandler) SignUp() func(http.ResponseWriter, *http.Request) error {
 		// 	return err
 		// }
 		res := schema.SignUpResponse{
-			Token:    token,
-			SigndURL: "",
+			Token:     token,
+			SignedURL: "",
 		}
 		if err := json.NewEncoder(w).Encode(res); err != nil {
 			return err

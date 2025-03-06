@@ -32,7 +32,7 @@ func (m *MessageService) Create(ctx context.Context, message entity.Message) (*e
 
 // GetAll implements IMessageService.
 func (m *MessageService) GetAll(ctx context.Context) ([]entity.Message, error) {
-	panic("unimplemented")
+	return m.mr.GetAll(ctx)
 }
 
 // GetByID implements IMessageService.

@@ -26,3 +26,5 @@ UPDATE users
   set hashed_password = $2
 WHERE user_id = $1;
 
+-- name: GetAllMessage :many
+SELECT * from messages;
