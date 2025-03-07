@@ -60,7 +60,7 @@ export default function PostPage() {
   // バブル送信処理：バブルを上にアニメーションさせた後、チェックマークとモーダルを表示
   const submitBubble = async () => {
     try {
-      const response = await fetch('https://32a1-2405-6581-1420-4300-8823-37ad-1916-ec71.ngrok-free.app', {
+      const response = await fetch('https://08ac-131-112-213-64.ngrok-free.app/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
