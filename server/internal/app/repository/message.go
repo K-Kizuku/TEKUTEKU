@@ -4,6 +4,9 @@ import (
 	"context"
 	"time"
 
+	"github.com/0-s0g0/TEKUTEKU/server/pkg/errors"
+	timeformat "github.com/0-s0g0/TEKUTEKU/server/pkg/time_format"
+
 	"github.com/0-s0g0/TEKUTEKU/server/db/sql/query"
 	"github.com/0-s0g0/TEKUTEKU/server/internal/domain/entity"
 	"github.com/0-s0g0/TEKUTEKU/server/internal/domain/repository"
@@ -19,22 +22,61 @@ func NewMessageRepository(queries *query.Queries) repository.IMessageRepository 
 
 // Create implements repository.IMessageRepository.
 func (m *MessageRepository) Create(ctx context.Context, message entity.Message) (*entity.Message, error) {
-	panic("unimplemented")
+	_, err := m.queries.CreateMessage(ctx, query.CreateMessageParams{
+		MessageID: message.ID,
+		School:    int32(message.School),
+		Message:   message.Message,
+		X:         int32(message.X),
+		Y:         int32(message.Y),
+		FloatTime: message.FloatTime,
+		CreatedAt: timeformat.Format(message.CreatedAt),
+	})
+	if err != nil {
+		return nil, errors.HandleDBError(err)
+	}
+	// createdMessage := &entity.Message{
+	// 	ID:        massage.MessageID,
+	// 	School:    int(massage.School),
+	// 	Message:   massage.Message,
+	// 	Likes:     int(massage.Likes),
+	// 	X:         int(massage.X),
+	// 	Y:         int(massage.Y),
+	// 	FloatTime: massage.FloatTime,
+	// 	CreatedAt: massage.CreatedAt.Time,
+	// }
+	return nil, nil
 }
 
 // GetAll implements repository.IMessageRepository.
 func (m *MessageRepository) GetAll(ctx context.Context) ([]entity.Message, error) {
-	panic("unimplemented")
+	massage, err := m.queries.GetAllMessage(ctx)
+	if err != nil {
+		return nil, errors.HandleDBError(err)
+	}
+	a := make([]entity.Message, 0, len(massage))
+	for _, m := range massage {
+		a = append(a, entity.Message{
+			ID:        m.MessageID,
+			School:    int(m.School),
+			Message:   m.Message,
+			Likes:     int(m.Likes),
+			X:         int(m.X),
+			Y:         int(m.Y),
+			FloatTime: m.FloatTime,
+			CreatedAt: timeformat.Parse(m.CreatedAt),
+		})
+	}
+	return a, nil
 }
 
 // GetByID implements repository.IMessageRepository.
 func (m *MessageRepository) GetByID(ctx context.Context, id string) (*entity.Message, error) {
-	panic("unimplemented")
+	return nil, nil
 }
 
 // GetByTimeRange implements repository.IMessageRepository.
 func (m *MessageRepository) GetByTimeRange(ctx context.Context, from time.Time, to time.Time) ([]entity.Message, error) {
-	panic("unimplemented")
+	return nil, nil
 }
 
 // GiveLike implements repository.IMessageRepository.

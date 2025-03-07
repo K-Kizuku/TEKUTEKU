@@ -7,6 +7,6 @@ type SignUpRequest struct {
 }
 
 type SignUpResponse struct {
-	Token    string `json:"token"`
-	SigndURL string `json:"signed_url"`
+	Token     string `json:"token"`
+	SignedURL string `json:"signed_url"`
 }

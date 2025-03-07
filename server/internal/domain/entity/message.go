@@ -1,10 +1,14 @@
 package entity
 
+import "time"
+
 type Message struct {
 	ID        string
-	User      User
 	Message   string
 	Likes     int
-	Size      int
-	FloatTime int
+	X         int
+	Y         int
+	FloatTime float32
+	School    int
+	CreatedAt time.Time
 }

@@ -7,16 +7,13 @@ package query
 import (
 	"database/sql/driver"
 	"fmt"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type University string
 
 const (
-	UniversityTakiPlaza University = "taki_plaza"
-	UniversityGymlab    University = "gymlab"
-	UniversityPorto     University = "porto"
+	UniversityKyutech      University = "kyutech"
+	UniversitySciencetokyo University = "science tokyo"
 )
 
 func (e *University) Scan(src interface{}) error {
@@ -56,9 +53,12 @@ func (ns NullUniversity) Value() (driver.Value, error) {
 
 type Message struct {
 	MessageID string
-	UserID    string
+	School    int32
+	X         int32
+	Y         int32
 	Message   string
-	CreatedAt pgtype.Timestamp
+	CreatedAt string
+	FloatTime float32
 	Likes     int32
 }
 

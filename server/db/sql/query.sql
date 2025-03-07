@@ -26,9 +26,18 @@ UPDATE users
   set hashed_password = $2
 WHERE user_id = $1;
 
+-- name: GetAllMessage :many
+SELECT * from messages;
 
 -- name: IncrementLikes :exec
 UPDATE messages
   set likes = likes + 1
 WHERE message_id = $1;
 
+-- name: CreateMessage :one
+INSERT INTO messages (
+  message_id, school, x, y, message, created_at, float_time
+) VALUES (
+  $1, $2, $3, $4, $5, $6, $7
+)
+RETURNING *;

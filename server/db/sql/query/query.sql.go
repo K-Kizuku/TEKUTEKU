@@ -9,6 +9,49 @@ import (
 	"context"
 )
 
+const createMessage = `-- name: CreateMessage :one
+INSERT INTO messages (
+  message_id, school, x, y, message, created_at, float_time
+) VALUES (
+  $1, $2, $3, $4, $5, $6, $7
+)
+RETURNING message_id, school, x, y, message, created_at, float_time, likes
+`
+
+type CreateMessageParams struct {
+	MessageID string
+	School    int32
+	X         int32
+	Y         int32
+	Message   string
+	CreatedAt string
+	FloatTime float32
+}
+
+func (q *Queries) CreateMessage(ctx context.Context, arg CreateMessageParams) (Message, error) {
+	row := q.db.QueryRow(ctx, createMessage,
+		arg.MessageID,
+		arg.School,
+		arg.X,
+		arg.Y,
+		arg.Message,
+		arg.CreatedAt,
+		arg.FloatTime,
+	)
+	var i Message
+	err := row.Scan(
+		&i.MessageID,
+		&i.School,
+		&i.X,
+		&i.Y,
+		&i.Message,
+		&i.CreatedAt,
+		&i.FloatTime,
+		&i.Likes,
+	)
+	return i, err
+}
+
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (
   user_id, mail, name, hashed_password
@@ -41,6 +84,39 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.HashedPassword,
 	)
 	return i, err
+}
+
+const getAllMessage = `-- name: GetAllMessage :many
+SELECT message_id, school, x, y, message, created_at, float_time, likes from messages
+`
+
+func (q *Queries) GetAllMessage(ctx context.Context) ([]Message, error) {
+	rows, err := q.db.Query(ctx, getAllMessage)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Message
+	for rows.Next() {
+		var i Message
+		if err := rows.Scan(
+			&i.MessageID,
+			&i.School,
+			&i.X,
+			&i.Y,
+			&i.Message,
+			&i.CreatedAt,
+			&i.FloatTime,
+			&i.Likes,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
