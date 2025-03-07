@@ -1,9 +1,11 @@
 "use client";
 
+
 import { useState, useEffect } from "react";
 import BubbleVis from "../../components/BubbleVis/page";
 import styles from "./index.module.css";
 import { BubbleType2, BubbleType } from "@/app/data/types";
+import BackgroundVideo from "@/app/components/BackgroundVideo";
 
 // APIから返ってきたデータを直接扱う型を定義
 interface ApiMessage {
@@ -193,10 +195,14 @@ export default function Home() {
         {isLoading && data.length === 0 ? (
           <div className={styles.loading}>Loading...</div>
         ) : (
-          <BubbleVis bubbles={data} onLike={handleLike} />
+          <>
+            <BubbleVis bubbles={data} onLike={handleLike} />
+            <BackgroundVideo />
+          </>
         )}
         {error && <div className={styles.error}>{error}</div>}
       </main>
     </div>
   );
 }
+
