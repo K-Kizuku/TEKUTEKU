@@ -14,7 +14,6 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import styles from "./video.module.css";
 
 // Firebase の初期化（各自の設定情報に置き換えてください）
 const firebaseConfig = {
@@ -320,7 +319,6 @@ const BackgroundVideo = () => {
 
   return (
     <div>
-      <h1>Welcome to FirebaseRTC!</h1>
       <div id="buttons">
         <button onClick={openUserMedia} disabled={cameraDisabled}>
           Open camera &amp; microphone
@@ -345,12 +343,20 @@ const BackgroundVideo = () => {
           muted
           autoPlay
           playsInline
+          style={{
+            width: "100vw",
+            position: "absolute",
+            bottom: 0,
+            right: 0,
+            display: "none",
+          }}
         ></video>
         <video
           ref={remoteVideoRef}
           id="remoteVideo"
           autoPlay
           playsInline
+          style={{ width: "100vw", position: "absolute", top: 0, left: 0 }}
         ></video>
       </div>
       {/* Join Room 用の簡易ダイアログ（モーダル風） */}
