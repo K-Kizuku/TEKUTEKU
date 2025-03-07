@@ -195,8 +195,10 @@ export default function Home() {
         {isLoading && data.length === 0 ? (
           <div className={styles.loading}>Loading...</div>
         ) : (
-          <BubbleVis bubbles={data} onLike={handleLike} />
-             <BackgroundVideo />
+          <>
+            <BubbleVis bubbles={data} onLike={handleLike} />
+            <BackgroundVideo />
+          </>
         )}
         {error && <div className={styles.error}>{error}</div>}
       </main>
