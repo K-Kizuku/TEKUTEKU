@@ -11,6 +11,7 @@ interface BubbleProps {
     showReplies: boolean;
     toggleReplies: () => void;
     onAddReply: (bubbleId: string, replyText: string) => void;
+    isNew?: boolean;
 }
 
 export default function Bubble({ 
@@ -18,7 +19,9 @@ export default function Bubble({
     onLike, 
     showReplies, 
     toggleReplies, 
-    onAddReply 
+    onAddReply,
+    isNew = false
+    
 }: BubbleProps) {
     const size = 100 + bubble.likes * 5;
     const [animationDelay, setAnimationDelay] = useState<string | null>(null);
@@ -42,6 +45,7 @@ export default function Bubble({
         background: bubble.type === 1 
             ? 'radial-gradient(#96fbc4 50%, #f9f586 100%)' 
             : 'radial-gradient(#f9f586 55%, #96fbc4 100%)',
+        
     };
 
     const replyRadius = size * 0.8;
@@ -87,6 +91,10 @@ export default function Bubble({
     const getPlusButtonIndex = () => {
         return bubble.replies ? Math.min(bubble.replies.length, maxReplies - 1) : 0;
     };
+
+      
+      // Apply animation class if this is a new bubble
+      const bubbleClassName = `${styles.bubble} ${isNew ? styles.newBubble : ''}`;
 
     return (
         <>
